@@ -13,8 +13,9 @@
 @property(strong, nonatomic) NSString *contents;
 
 @property(nonatomic, getter = isFaceUp) BOOL faceUp;
-@property(nonatomic, getter = isUnPlayable) BOOL unPlayable;
+@property(nonatomic, getter = isPlayable) BOOL playable;
 
 - (int) match:(NSArray *) otherCards;
+- (void) flip;
 
 @end

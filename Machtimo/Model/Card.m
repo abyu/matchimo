@@ -10,6 +10,10 @@
 
 @implementation Card
 
+- (void)flip {
+    self.faceUp = !self.faceUp;
+}
+
 - (int)match:(NSArray *)otherCards{
     int score = 0;
     
