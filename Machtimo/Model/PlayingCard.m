@@ -42,4 +42,25 @@
     return _suit ? _suit : @"?";
 }
 
+- (int)match:(NSArray *)otherCards{
+    int score = 0;
+    for (PlayingCard *card in otherCards) {
+        if ([self.suit isEqualToString:card.suit]){
+            score += 1;
+            self.playable = NO;
+            card.playable = NO;
+        }
+        if (self.rank == card.rank){
+            score += 3;
+            self.playable = NO;
+            card.playable = NO;
+        }
+        if (score == 0) {
+            card.faceUp = NO;
+            score -= 1;
+        }
+    }
+    return score;
+}
+
 @end

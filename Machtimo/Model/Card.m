@@ -10,6 +10,16 @@
 
 @implementation Card
 
+- (id)init{
+    self = [super init];
+    
+    if(self){
+        self.playable = YES;
+    }
+    
+    return self;
+}
+
 - (void)flip {
     self.faceUp = !self.faceUp;
 }
@@ -24,5 +34,6 @@
     
     return score;
 }
+
 
 @end

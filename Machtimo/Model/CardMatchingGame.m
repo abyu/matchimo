@@ -11,10 +11,8 @@
 @interface CardMatchingGame()
 @property(nonatomic) NSUInteger cardsCount;
 @property(strong, nonatomic) NSMutableArray *cards; //of card
-@property(weak, nonatomic) Card* pivotCard;
 @property(readwrite, nonatomic) int score;
-
-- (void)updatePivotCard;
+- (void)calculateScore:(Card *)matchWithCard matchCount:(NSUInteger)matchCount;
 @end
 
 @implementation CardMatchingGame
@@ -38,19 +36,20 @@
     return self;
 }
 
-- (int)calculateScore:(NSUInteger)matchCount{
+- (void)calculateScore:(Card *)matchWithCard matchCount:(NSUInteger)matchCount{
+    int score = 0;
     NSMutableArray *cardsToMatch = [[NSMutableArray alloc] init];
     for (Card *card in self.cards) {
         if (matchCount <= 0) {
             break;
         }
-        if (card.isFaceUp && card != self.pivotCard) {
+        if (card.isPlayable && card.isFaceUp && card != matchWithCard) {
             [cardsToMatch addObject:card];
             matchCount -= 1;
         }
     }
-    self.score = [self.pivotCard match:cardsToMatch];
-    return self.score;
+    score = [matchWithCard match:cardsToMatch];
+    self.score += score;
 }
 
 - (Card *)cardAtIndex:(NSUInteger)index {
@@ -58,20 +57,9 @@
 }
 
 - (void)flipCardAtIndex:(NSUInteger)index{
-    [self updatePivotCard]; //Capture card that is already face up
-    [[self.cards objectAtIndex:index] flip];
-    [self updatePivotCard]; //do it again after a flip
+    Card* card = [self.cards objectAtIndex:index];
+    [card flip];
+    [self calculateScore:card matchCount:1];
 }
-
-- (void)updatePivotCard{
-    for (Card *card in self.cards) {
-        if (card.isFaceUp && card.isPlayable && !self.pivotCard){
-            self.pivotCard = card;
-            return;
-        }
-    }
-    self.pivotCard = nil;
-}
-
 
 @end

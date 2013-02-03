@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 @property (nonatomic) int flipCount;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (strong, nonatomic) CardMatchingGame *game;
 @end
 
@@ -40,13 +41,16 @@
     for (UIButton *button in self.cardButtons) {
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:button]];
         [button setTitle:card.contents forState:UIControlStateSelected];
+        [button setTitle:card.contents forState:UIControlStateSelected|UIControlStateDisabled];
         button.selected = card.isFaceUp;
+        button.enabled = card.playable;
+        button.alpha = button.isEnabled ? 1 : 0.3;
     }
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
 - (IBAction)flipCard:(UIButton *)sender {
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
-    [self.game calculateScore:1];
     [self updateUI];
     self.flipCount++;
 }
