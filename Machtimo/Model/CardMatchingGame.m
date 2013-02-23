@@ -69,6 +69,7 @@
 
 - (void)flipCardAtIndex:(NSUInteger)index{
     Card* card = [self.cards objectAtIndex:index];
+    
     [card flip];
     [self calculateScore:card matchCount:1];
 }

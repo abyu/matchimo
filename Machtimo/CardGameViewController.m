@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (strong, nonatomic) CardMatchingGame *game;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *matchModeSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @end
 
@@ -53,6 +54,8 @@
 
 - (IBAction)flipCard:(UIButton *)sender {
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
+    self.matchModeSwitch.enabled = NO;
+    self.matchModeSwitch.alpha = 0.3;
     [self updateUI];
     self.flipCount++;
 }
@@ -60,6 +63,8 @@
 - (IBAction)deal:(id)sender {
     [self.game reset:[[PlayingCardDeck alloc] init]];
     [self updateUI];
+    self.matchModeSwitch.enabled = YES;
+    self.matchModeSwitch.alpha = 1;
     self.flipCount = 0;
 }
 
