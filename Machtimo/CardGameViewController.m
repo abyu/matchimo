@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (strong, nonatomic) CardMatchingGame *game;
+@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @end
 
 @implementation CardGameViewController
@@ -46,6 +47,7 @@
         button.enabled = card.playable;
         button.alpha = button.isEnabled ? 1 : 0.3;
     }
+    self.statusLabel.text = self.game.lastMatchDescription;
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
@@ -55,5 +57,10 @@
     self.flipCount++;
 }
 
+- (IBAction)deal:(id)sender {
+    [self.game reset:[[PlayingCardDeck alloc] init]];
+    [self updateUI];
+    self.flipCount = 0;
+}
 
 @end

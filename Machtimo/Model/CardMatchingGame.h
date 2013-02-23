@@ -16,6 +16,8 @@
 - (id) initWithCards:(NSUInteger)count :(Deck *)deck;
 - (Card *)cardAtIndex:(NSUInteger)index;
 - (void) flipCardAtIndex:(NSUInteger)index;
+- (void) reset:(Deck *)deck;
 
+@property(readonly, nonatomic)NSString *lastMatchDescription;
 @property(readonly, nonatomic)int score;
 @end

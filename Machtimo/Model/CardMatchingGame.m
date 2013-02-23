@@ -12,7 +12,9 @@
 @property(nonatomic) NSUInteger cardsCount;
 @property(strong, nonatomic) NSMutableArray *cards; //of card
 @property(readwrite, nonatomic) int score;
+@property(readwrite, nonatomic) NSString *lastMatchDescription;
 - (void)calculateScore:(Card *)matchWithCard matchCount:(NSUInteger)matchCount;
+- (void)updateMatchDescription:(NSInteger) score matched:(Card *)matchedCard with:(NSArray *)cards;
 @end
 
 @implementation CardMatchingGame
@@ -36,6 +38,14 @@
     return self;
 }
 
+- (void)reset:(Deck *)deck{
+    for (unsigned i=0; i<self.cardsCount; i++) {
+        self.cards[i] = [deck drawRandomCard];
+    }
+    self.score = 0;
+    self.lastMatchDescription = @"";
+}
+
 - (void)calculateScore:(Card *)matchWithCard matchCount:(NSUInteger)matchCount{
     int score = 0;
     NSMutableArray *cardsToMatch = [[NSMutableArray alloc] init];
@@ -49,6 +59,7 @@
         }
     }
     score = [matchWithCard match:cardsToMatch];
+    [self updateMatchDescription:score matched:matchWithCard with:cardsToMatch];
     self.score += score;
 }
 
@@ -60,6 +71,23 @@
     Card* card = [self.cards objectAtIndex:index];
     [card flip];
     [self calculateScore:card matchCount:1];
+}
+
+- (void)updateMatchDescription:(NSInteger)score matched:(Card *)matchedCard with:(NSArray *)cards {
+    if (cards.count <= 0) {
+        self.lastMatchDescription = [NSString stringWithFormat:@"Flipped %@", matchedCard.contents];
+        return ;
+    }
+    
+    if (score <= 0) {
+        self.lastMatchDescription = [NSString stringWithFormat:@"%@ and %@ don't match", matchedCard.contents, ((Card*)cards[0]).contents];
+        return;
+    }
+    
+    if (score > 0) {
+        self.lastMatchDescription = [NSString stringWithFormat:@"Matched %@ and %@ for %d points", matchedCard.contents, ((Card*)cards[0]).contents, score];
+        return;
+    }
 }
 
 @end
